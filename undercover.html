@@ -2,8 +2,8 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"> 
-    <title>Undercover</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Undercover - Édition Ultime</title>
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800;900&display=swap" rel="stylesheet">
@@ -12,16 +12,16 @@
             --bg-gradient: linear-gradient(135deg, #FDFEFE 0%, #F4F7FB 100%);
             --card-bg: rgba(255, 255, 255, 0.95);
             --text-main: #1C1C1E; --text-muted: #8E8E93;
-            --blue: #5E93FF; --purple: #A078FF; --yellow: #FFD043; --red: #FF5A5F; --green: #34C759;
+            --blue: #5E93FF; --purple: #A078FF; --yellow: #FFD043; --red: #FF5A5F; --green: #34C759; --pink: #FF61D8;
             --shadow-sm: 0 4px 15px rgba(0, 0, 0, 0.04); --shadow-md: 0 10px 30px rgba(0, 0, 0, 0.08);
-            --modal-overlay: rgba(0,0,0,0.5);
+            --modal-overlay: rgba(0,0,0,0.6);
         }
         [data-theme="dark"] {
             --bg-gradient: linear-gradient(135deg, #121212 0%, #1E1E24 100%);
             --card-bg: rgba(30, 30, 36, 0.95);
             --text-main: #F2F2F7; --text-muted: #98989D;
             --shadow-sm: 0 4px 15px rgba(0, 0, 0, 0.3); --shadow-md: 0 10px 30px rgba(0, 0, 0, 0.5);
-            --modal-overlay: rgba(0,0,0,0.8);
+            --modal-overlay: rgba(0,0,0,0.85);
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-tap-highlight-color: transparent; }
@@ -42,7 +42,7 @@
         .screen.active { display: flex; opacity: 1; transform: translateY(0); }
 
         .home-header { text-align: center; margin: 0.5rem 0 1rem; }
-        .home-header h1 { font-size: 2.6rem; background: linear-gradient(45deg, var(--blue), var(--purple)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .home-header h1 { font-size: 2.6rem; background: linear-gradient(45deg, var(--blue), var(--pink)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .settings-row { display: flex; justify-content: space-between; align-items: center; padding: 0.9rem 1rem; background: var(--card-bg); border-radius: 16px; margin-bottom: 0.5rem; font-weight: 800; box-shadow: var(--shadow-sm); font-size: 0.95rem; }
         .settings-row select, .settings-row input { font-family: inherit; font-weight: 700; font-size: 0.95rem; padding: 0.4rem; border-radius: 8px; border: 1px solid var(--text-muted); background: var(--card-bg); color: var(--text-main); }
 
@@ -63,14 +63,16 @@
         .overlay.active .modal-content { transform: scale(1); }
         .btn-back-modal { position: absolute; top: 1rem; left: 1rem; background: none; border: none; font-size: 1.5rem; color: var(--text-muted); cursor: pointer; }
 
-        .word-display { margin: 1.5rem 0; padding: 1.5rem; border-radius: 20px; border: 2px dashed var(--blue); background: rgba(94,147,255,0.05); }
-        .word-display h3 { font-size: 1.8rem; color: var(--blue); word-break: break-word; }
+        /* SECRET HOLD CARD ZONE */
+        .secret-press-box { margin: 1.5rem 0; padding: 2rem 1rem; border-radius: 20px; border: 2px dashed var(--pink); background: rgba(255,97,216,0.05); cursor: pointer; user-select: none; transition: background 0.2s; }
+        .secret-press-box:active { background: rgba(255,97,216,0.15); }
 
         .anim-screen { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 2000; display: flex; flex-direction: column; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: opacity 0.3s; text-align: center; padding: 2rem; color: white; }
         .anim-screen.active { opacity: 1; pointer-events: auto; }
         .bg-blue { background: rgba(94, 147, 255, 0.96); backdrop-filter: blur(10px); }
         .bg-red { background: rgba(255, 90, 95, 0.96); backdrop-filter: blur(10px); }
         .bg-gold { background: rgba(255, 208, 67, 0.96); backdrop-filter: blur(10px); color: #1C1C1E; }
+        .bg-pink { background: rgba(255, 97, 216, 0.96); backdrop-filter: blur(10px); }
         
         .history-log { font-size: 0.85rem; color: var(--text-muted); background: rgba(0,0,0,0.03); padding: 1rem; border-radius: 12px; max-height: 150px; overflow-y: auto; text-align: left; }
         [data-theme="dark"] .history-log { background: rgba(255,255,255,0.05); }
@@ -89,7 +91,7 @@
         <div id="screen-home" class="screen active">
             <div class="home-header">
                 <h1>Undercover</h1>
-                <p style="color: var(--text-muted); font-size: 0.9rem; font-weight: 700;">Le jeu de mots et de bluff</p>
+                <p style="color: var(--text-muted); font-size: 0.9rem; font-weight: 700;">Édition Ultime & Ergonomique</p>
             </div>
             <button class="btn btn-blue" onclick="startFlow(false)" style="font-size: 1.2rem; padding: 1.4rem; margin-bottom: 0.8rem; box-shadow: 0 10px 20px rgba(94,147,255,0.3);">
                 ▶️ Nouvelle Partie
@@ -111,6 +113,7 @@
             <div class="settings-row"><span>🌙 Mode Sombre</span> <input type="checkbox" id="set-dark" onchange="toggleTheme(this.checked)"></div>
             <div class="settings-row"><span>🎉 Animations fluides</span> <input type="checkbox" id="set-anim" checked></div>
             <div class="settings-row"><span>🤍 Mister White</span> <input type="checkbox" id="set-white" checked></div>
+            <div class="settings-row"><span>🤪 Rôle du Fou (Option)</span> <input type="checkbox" id="set-fool"></div>
             <div class="settings-row">
                 <span>🕵️ Nombre d'Undercovers</span>
                 <select id="set-under-count">
@@ -177,7 +180,7 @@
         <!-- DISTRIBUTION -->
         <div id="screen-reveal-list" class="screen">
             <h2 style="text-align: center; margin-bottom: 0.3rem;">📱 Distribution</h2>
-            <p style="text-align: center; color: var(--text-muted); font-size: 0.85rem; margin-bottom: 0.8rem;">Passez le téléphone chacun votre tour (sans écran intermédiaire).</p>
+            <p style="text-align: center; color: var(--text-muted); font-size: 0.85rem; margin-bottom: 0.8rem;">Passez le téléphone chacun votre tour (Anti-regard actif).</p>
             <div class="grid-2" id="revealGrid" style="flex:1; overflow-y:auto; max-height:550px;"></div>
         </div>
 
@@ -200,7 +203,7 @@
                 <div style="font-size: 3.5rem; margin-bottom: 0.5rem;" id="vicEmoji">🏆</div>
                 <h2 style="font-size: 1.8rem; margin-bottom: 0.3rem;" id="vicTitle">VICTOIRE</h2>
                 <p style="color: var(--text-muted); font-weight: 600; margin-bottom: 1.5rem; font-size: 0.9rem;" id="vicSub">...</p>
-                <div style="background: rgba(0,0,0,0.03); padding: 1.2rem; border-radius: 16px; margin-bottom: 1.5rem; text-align: left;">
+                <div style="background: rgba(0,0,0,0.03); padding: 1.2rem; border-radius: 16px; margin-bottom: 1.5rem; text-align: left;" id="vic-words-box">
                     <p style="font-weight: 800; font-size: 0.85rem; color: var(--text-muted);">Mot des Civils :</p>
                     <div style="font-size: 1.3rem; font-weight: 900; color: var(--blue); margin-bottom: 0.8rem;" id="vic-civil-word"></div>
                     <p style="font-weight: 800; font-size: 0.85rem; color: var(--text-muted);">Mot Undercover :</p>
@@ -212,18 +215,19 @@
         </div>
     </div>
 
-    <!-- MODAL MOT SECRET -->
+    <!-- MODAL MOT SECRET (ANTI-REGARD PAR APPUI LONG) -->
     <div class="overlay" id="modal-word">
         <div class="modal-content">
-            <button class="btn-back-modal" onclick="document.getElementById('modal-word').classList.remove('active')">←</button>
+            <button class="btn-back-modal" onclick="closeWordModal()">✕</button>
             <div style="font-size: 3rem; margin-bottom: 0.5rem;" id="word-avatar">👤</div>
-            <h2 id="word-name" style="color: var(--text-muted); font-size: 1.1rem;">Joueur</h2>
-            <div class="word-display" id="word-box">
-                <div style="font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.4rem;">Votre mot secret est</div>
-                <h3 id="word-text">Mot</h3>
+            <h2 id="word-name" style="color: var(--text-muted); font-size: 1.1rem; margin-bottom: 0.5rem;">Joueur</h2>
+            
+            <div class="secret-press-box" id="pressSecretBox">
+                <div style="font-size: 0.8rem; text-transform: uppercase; color: var(--pink); font-weight: 800; margin-bottom: 0.4rem;" id="secret-instruction">👇 MAINTIENS APPUYÉ POUR VOIR TON RÔLE</div>
+                <h3 id="word-text" style="font-size: 1.6rem; color: var(--text-muted); filter: blur(8px); transition: filter 0.1s;">Mot Secret</h3>
             </div>
-            <p style="font-weight: 800; color: var(--text-muted); margin-bottom: 1.5rem; font-size: 0.9rem;" id="word-phrase">🤫 Chut, ne le dis à personne !</p>
-            <button class="btn btn-blue" onclick="confirmMemorized()">✅ J'ai mémorisé</button>
+
+            <p style="font-weight: 800; color: var(--text-muted); font-size: 0.85rem;" id="word-phrase">🔒 Lève le doigt pour masquer</p>
         </div>
     </div>
 
@@ -271,6 +275,13 @@
         <button class="btn btn-gray" style="max-width: 200px; margin-top: 3rem; color: #1C1C1E;" onclick="continueAfterElim()">Continuer</button>
     </div>
 
+    <div class="anim-screen bg-pink" id="anim-elim-fool">
+        <div style="font-size: 5rem; margin-bottom: 1rem;">🤪</div>
+        <h1 style="font-size: 2.5rem; margin-bottom: 0.5rem;">C'était le FOU !</h1>
+        <p style="font-size: 1.2rem; font-weight: 700;" id="txt-elim-fool">Il s'est fait éliminer au tour 1 et remporte la partie solo !</p>
+        <button class="btn btn-gray" style="max-width: 200px; margin-top: 3rem; color: #1C1C1E;" onclick="triggerFoolWin()">Victoire du Fou !</button>
+    </div>
+
     <div class="anim-screen bg-gold" id="anim-white">
         <div style="font-size: 4rem; margin-bottom: 1rem;">✨</div>
         <h1 style="font-size: 2rem; margin-bottom: 0.5rem;">Mr White démasqué !</h1>
@@ -296,7 +307,7 @@
                 ["Coca-Cola", "Pepsi"], ["Nutella", "Confiture"], ["Ketchup", "Mayonnaise"], ["Pâtes", "Riz"], ["Croissant", "Pain au Chocolat"],
                 ["Bières", "Cidre"], ["Vin Rouge", "Vin Blanc"], ["Jus d'Orange", "Jus de Pomme"], ["Camembert", "Brie"], ["Roquefort", "Chèvre"],
                 ["Barbecue", "Plancha"], ["Carpaccio", "Tartare"], ["Pop-Corn", "Chips"], ["Limonade", "Eau Pétillante"], ["Miel", "Sirop d'Érable"],
-                ["Caramel", "Vanille"], ["Fraises", "Framboises"], ["Melon", Pastèque = "Pastèque"], ["Ananas", "Mangue"], ["Courgette", "Aubergine"],
+                ["Caramel", "Vanille"], ["Fraises", "Framboises"], ["Melon", "Pastèque"], ["Ananas", "Mangue"], ["Courgette", "Aubergine"],
                 ["Tomate", "Concombre"], ["Salade", "Épinards"], ["Poulet", "Dinde"], ["Saumon", "Thon"], ["Crevettes", "Crabe"],
                 ["Omelette", "Œuf au plat"], ["Lasagnes", "Cannellonis"], ["Cassoulet", "Choucroute"], ["Foie Gras", "Pâté"], ["Raviolis", "Tortellinis"]
             ],
@@ -352,7 +363,6 @@
             ]
         };
 
-        // Ajout dynamique du Mélange et chargement des custom mots
         let customDB = JSON.parse(localStorage.getItem('uc_custom_db')) || [];
         
         function rebuildMillage() {
@@ -387,6 +397,7 @@
                 document.getElementById('set-dark').checked = true;
             }
             renderCustomWordsList();
+            setupPressAndHoldSecret();
         };
 
         function switchScreen(id) {
@@ -581,19 +592,28 @@
             let roles = Array(N).fill('CIVIL');
             let idx = 0;
             
+            // Attribution Mister White
             if(document.getElementById('set-white').checked && N >= 4) { roles[idx] = 'WHITE'; idx++; }
             
+            // Attribution du Fou
+            const hasFool = document.getElementById('set-fool').checked && N >= 4;
+            if(hasFool) { roles[idx] = 'FOOL'; idx++; }
+
+            // Attribution Undercovers
             const underCount = parseInt(document.getElementById('set-under-count').value);
             for(let u = 0; u < underCount; u++) {
                 if(idx < N) { roles[idx] = 'UNDER'; idx++; }
             }
             roles.sort(() => Math.random() - 0.5);
 
-            game.rolesData = defaultPlayers.map((name, i) => ({
-                id: i, name: name, role: roles[i], avatar: AVATARS[i%AVATARS.length],
-                word: roles[i] === 'WHITE' ? "???" : (roles[i] === 'UNDER' ? game.underWord : game.civilWord),
-                isAlive: true, hasRevealed: false
-            }));
+            game.rolesData = defaultPlayers.map((name, i) => {
+                let role = roles[i];
+                let word = game.civilWord;
+                if(role === 'WHITE') word = "???";
+                if(role === 'UNDER') word = game.underWord;
+                if(role === 'FOOL') word = "FOU";
+                return { id: i, name: name, role: role, avatar: AVATARS[i%AVATARS.length], word: word, isAlive: true, hasRevealed: false };
+            });
 
             game.round = 1; game.history = []; game.winner = null;
             buildRevealGrid();
@@ -620,25 +640,52 @@
             const p = game.rolesData[id];
             document.getElementById('word-avatar').innerText = p.avatar;
             document.getElementById('word-name').innerText = p.name;
-            const wBox = document.getElementById('word-box');
             const wText = document.getElementById('word-text');
             const wPhrase = document.getElementById('word-phrase');
 
             if(p.role === 'WHITE') {
-                wBox.style.borderColor = 'var(--yellow)'; wBox.style.background = 'rgba(255,208,67,0.05)';
-                wText.style.color = 'var(--yellow)'; wText.innerText = "Mister White";
-                wPhrase.innerText = "🧠 À toi de deviner le mot des civils !";
+                wText.innerText = "Mister White";
+            } else if(p.role === 'FOOL') {
+                wText.innerText = "FOU";
             } else {
-                wBox.style.borderColor = 'var(--blue)'; wBox.style.background = 'rgba(94,147,255,0.05)';
-                wText.style.color = 'var(--blue)'; wText.innerText = p.word;
-                wPhrase.innerText = "🤫 Chut, ne le dis à personne !";
+                wText.innerText = p.word;
             }
             document.getElementById('modal-word').classList.add('active');
         }
 
-        function confirmMemorized() {
-            const p = game.rolesData[game.pendingPlayerId];
-            p.hasRevealed = true;
+        // SYSTÈME DE MAINTIEN APPUYÉ (ANTI-REGARD)
+        function setupPressAndHoldSecret() {
+            const box = document.getElementById('pressSecretBox');
+            const wText = document.getElementById('word-text');
+            const inst = document.getElementById('secret-instruction');
+
+            const revealOn = (e) => {
+                e.preventDefault();
+                wText.style.filter = 'blur(0)';
+                wText.style.color = 'var(--text-main)';
+                inst.innerText = "👀 LECTURE EN COURS...";
+                vibrate(30);
+            };
+
+            const revealOff = (e) => {
+                e.preventDefault();
+                wText.style.filter = 'blur(8px)';
+                wText.style.color = 'var(--text-muted)';
+                inst.innerText = "👇 MAINTIENS APPUYÉ POUR VOIR TON RÔLE";
+            };
+
+            box.addEventListener('mousedown', revealOn);
+            box.addEventListener('mouseup', revealOff);
+            box.addEventListener('mouseleave', revealOff);
+
+            box.addEventListener('touchstart', revealOn, {passive: false});
+            box.addEventListener('touchend', revealOff, {passive: false});
+        }
+
+        function closeWordModal() {
+            if(game.pendingPlayerId !== null) {
+                game.rolesData[game.pendingPlayerId].hasRevealed = true;
+            }
             document.getElementById('modal-word').classList.remove('active');
             buildRevealGrid();
         }
@@ -704,9 +751,18 @@
             
             const p = game.rolesData[game.pendingPlayerId];
             p.isAlive = false;
-            let roleName = p.role === 'CIVIL' ? 'Civil' : (p.role === 'UNDER' ? 'Undercover' : 'Mister White');
+            let roleName = p.role === 'CIVIL' ? 'Civil' : (p.role === 'UNDER' ? 'Undercover' : (p.role === 'WHITE' ? 'Mister White' : 'Fou'));
             game.history.push(`<b>Tour ${game.round} :</b> ${p.avatar} ${p.name} - <i>${roleName}</i>`);
             document.getElementById('history-content').innerHTML = game.history.join('<br><br>');
+
+            // Règle du Fou : s'il est éliminé au Tour 1, il gagne immédiatement !
+            if (p.role === 'FOOL' && game.round === 1) {
+                if(!document.getElementById('set-anim').checked) { triggerFoolWin(); return; }
+                document.getElementById('txt-elim-fool').innerText = `${p.name} était le FOU et s'est fait éliminer au tour 1 !`;
+                document.getElementById('anim-elim-fool').classList.add('active');
+                return;
+            }
+
             game.round++;
 
             if(!document.getElementById('set-anim').checked) {
@@ -719,10 +775,18 @@
                 document.getElementById('anim-elim-civil').classList.add('active');
             } else if (p.role === 'UNDER') {
                 document.getElementById('anim-elim-under').classList.add('active');
-            } else {
+            } else if (p.role === 'WHITE') {
                 document.getElementById('whiteInput').value = "";
                 document.getElementById('anim-white').classList.add('active');
+            } else {
+                continueAfterElim();
             }
+        }
+
+        function triggerFoolWin() {
+            document.querySelectorAll('.anim-screen').forEach(s => s.classList.remove('active'));
+            game.winner = 'FOOL';
+            endGame();
         }
 
         function submitWhite() {
@@ -751,15 +815,17 @@
             switchScreen('screen-victory');
             playSound('win'); vibrate([100, 100, 100, 100, 400]);
             
-            // Mise à jour des scores
             if(!scores[game.winner]) scores[game.winner] = 0;
             scores[game.winner]++;
             localStorage.setItem('uc_scores', JSON.stringify(scores));
 
             const t = document.getElementById('vicTitle'); const s = document.getElementById('vicSub'); const emoji = document.getElementById('vicEmoji');
-            if (game.winner === 'CIVILS') { emoji.innerText="💙"; t.innerText = "VICTOIRE CIVILS"; t.style.color = 'var(--blue)'; s.innerText = "Tous les intrus ont été éliminés !"; }
-            if (game.winner === 'UNDER') { emoji.innerText="❤️"; t.innerText = "VICTOIRE UNDERCOVER"; t.style.color = 'var(--red)'; s.innerText = "Les Undercovers ont pris le contrôle."; }
-            if (game.winner === 'WHITE') { emoji.innerText="✨"; t.innerText = "VICTOIRE MR WHITE"; t.style.color = 'var(--yellow)'; s.innerText = "Mr White a deviné le mot exact !"; }
+            const wordsBox = document.getElementById('vic-words-box');
+
+            if (game.winner === 'CIVILS') { emoji.innerText="💙"; t.innerText = "VICTOIRE CIVILS"; t.style.color = 'var(--blue)'; s.innerText = "Tous les intrus ont été éliminés !"; wordsBox.style.display = 'block'; }
+            if (game.winner === 'UNDER') { emoji.innerText="❤️"; t.innerText = "VICTOIRE UNDERCOVER"; t.style.color = 'var(--red)'; s.innerText = "Les Undercovers ont pris le contrôle."; wordsBox.style.display = 'block'; }
+            if (game.winner === 'WHITE') { emoji.innerText="✨"; t.innerText = "VICTOIRE MR WHITE"; t.style.color = 'var(--yellow)'; s.innerText = "Mr White a deviné le mot exact !"; wordsBox.style.display = 'block'; }
+            if (game.winner === 'FOOL') { emoji.innerText="🤪"; t.innerText = "VICTOIRE DU FOU"; t.style.color = 'var(--pink)'; s.innerText = "Il s'est fait éliminer au tour 1 et gagne en solo !"; wordsBox.style.display = 'none'; }
             
             document.getElementById('vic-civil-word').innerText = game.civilWord;
             document.getElementById('vic-under-word').innerText = game.underWord;
@@ -770,7 +836,8 @@
             const types = [
                 {k: 'CIVILS', label: '💙 Victoires Civils', color: 'var(--blue)'},
                 {k: 'UNDER', label: '❤️ Victoires Undercover', color: 'var(--red)'},
-                {k: 'WHITE', label: '✨ Victoires Mr White', color: 'var(--yellow)'}
+                {k: 'WHITE', label: '✨ Victoires Mr White', color: 'var(--yellow)'},
+                {k: 'FOOL', label: '🤪 Victoires du Fou', color: 'var(--pink)'}
             ];
             container.innerHTML = types.map(t => `
                 <div class="score-badge" style="color: ${t.color}">
