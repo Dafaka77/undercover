@@ -64,7 +64,7 @@
         .btn-back-modal { position: absolute; top: 1rem; left: 1rem; background: none; border: none; font-size: 1.5rem; color: var(--text-muted); cursor: pointer; }
 
         /* SECRET HOLD CARD ZONE */
-        .secret-press-box { margin: 1.5rem 0; padding: 2rem 1rem; border-radius: 20px; border: 2px dashed var(--pink); background: rgba(255,97,216,0.05); cursor: pointer; user-select: none; transition: background 0.2s; }
+        .secret-press-box { margin: 1.2rem 0; padding: 1.8rem 1rem; border-radius: 20px; border: 2px dashed var(--pink); background: rgba(255,97,216,0.05); cursor: pointer; user-select: none; transition: background 0.2s; }
         .secret-press-box:active { background: rgba(255,97,216,0.15); }
 
         .anim-screen { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 2000; display: flex; flex-direction: column; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: opacity 0.3s; text-align: center; padding: 2rem; color: white; }
@@ -167,8 +167,11 @@
 
         <!-- PLACEMENT TABLE -->
         <div id="screen-table" class="screen">
-            <div class="card" style="text-align: center; margin: auto 0; padding: 1.2rem;">
+            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 0.2rem;">
+                <button class="btn-icon" onclick="switchScreen('screen-home')">←</button>
                 <h2>🪑 Placement Table</h2>
+            </div>
+            <div class="card" style="text-align: center; margin: auto 0; padding: 1.2rem;">
                 <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.3rem;">Glisse les icônes pour reproduire votre tour de table réel.</p>
                 <div class="table-container" id="tableContainer">
                     <div class="round-table"><span style="font-size: 1.8rem;">🎭</span><span style="font-size: 0.65rem; font-weight: 800; color: var(--text-muted);">Table</span></div>
@@ -179,8 +182,11 @@
 
         <!-- DISTRIBUTION -->
         <div id="screen-reveal-list" class="screen">
-            <h2 style="text-align: center; margin-bottom: 0.3rem;">📱 Distribution</h2>
-            <p style="text-align: center; color: var(--text-muted); font-size: 0.85rem; margin-bottom: 0.8rem;">Passez le téléphone chacun votre tour (Anti-regard actif).</p>
+            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 0.2rem;">
+                <button class="btn-icon" onclick="switchScreen('screen-home')">←</button>
+                <h2>📱 Distribution</h2>
+            </div>
+            <p style="text-align: center; color: var(--text-muted); font-size: 0.85rem; margin-bottom: 0.4rem;">Passez le téléphone chacun votre tour (Anti-regard actif).</p>
             <div class="grid-2" id="revealGrid" style="flex:1; overflow-y:auto; max-height:550px;"></div>
         </div>
 
@@ -215,19 +221,18 @@
         </div>
     </div>
 
-    <!-- MODAL MOT SECRET (ANTI-REGARD PAR APPUI LONG) -->
+    <!-- MODAL MOT SECRET (ANTI-REGARD PAR APPUI LONG + BOUTON VALIDER) -->
     <div class="overlay" id="modal-word">
         <div class="modal-content">
-            <button class="btn-back-modal" onclick="closeWordModal()">✕</button>
-            <div style="font-size: 3rem; margin-bottom: 0.5rem;" id="word-avatar">👤</div>
-            <h2 id="word-name" style="color: var(--text-muted); font-size: 1.1rem; margin-bottom: 0.5rem;">Joueur</h2>
+            <div style="font-size: 3rem; margin-bottom: 0.2rem;" id="word-avatar">👤</div>
+            <h2 id="word-name" style="color: var(--text-muted); font-size: 1.1rem; margin-bottom: 0.4rem;">Joueur</h2>
             
             <div class="secret-press-box" id="pressSecretBox">
-                <div style="font-size: 0.8rem; text-transform: uppercase; color: var(--pink); font-weight: 800; margin-bottom: 0.4rem;" id="secret-instruction">👇 MAINTIENS APPUYÉ POUR VOIR TON RÔLE</div>
-                <h3 id="word-text" style="font-size: 1.6rem; color: var(--text-muted); filter: blur(8px); transition: filter 0.1s;">Mot Secret</h3>
+                <div style="font-size: 0.75rem; text-transform: uppercase; color: var(--pink); font-weight: 800; margin-bottom: 0.3rem;" id="secret-instruction">👇 MAINTIENS APPUYÉ POUR VOIR TON RÔLE</div>
+                <h3 id="word-text" style="font-size: 1.5rem; color: var(--text-muted); filter: blur(8px); transition: filter 0.1s;">Mot Secret</h3>
             </div>
 
-            <p style="font-weight: 800; color: var(--text-muted); font-size: 0.85rem;" id="word-phrase">🔒 Lève le doigt pour masquer</p>
+            <button class="btn btn-green" id="btnRememberWord" onclick="closeWordModal()" style="padding: 0.9rem; font-size: 1rem; box-shadow: 0 5px 15px rgba(52,199,89,0.3);">J'ai mémorisé ✅</button>
         </div>
     </div>
 
@@ -641,7 +646,12 @@
             document.getElementById('word-avatar').innerText = p.avatar;
             document.getElementById('word-name').innerText = p.name;
             const wText = document.getElementById('word-text');
-            const wPhrase = document.getElementById('word-phrase');
+            const inst = document.getElementById('secret-instruction');
+
+            // Reset flou au démarrage de la modale
+            wText.style.filter = 'blur(8px)';
+            wText.style.color = 'var(--text-muted)';
+            inst.innerText = "👇 MAINTIENS APPUYÉ POUR VOIR TON RÔLE";
 
             if(p.role === 'WHITE') {
                 wText.innerText = "Mister White";
@@ -653,7 +663,7 @@
             document.getElementById('modal-word').classList.add('active');
         }
 
-        // SYSTÈME DE MAINTIEN APPUYÉ (ANTI-REGARD)
+        // SYSTÈME DE MAINTIEN APPUYÉ
         function setupPressAndHoldSecret() {
             const box = document.getElementById('pressSecretBox');
             const wText = document.getElementById('word-text');
