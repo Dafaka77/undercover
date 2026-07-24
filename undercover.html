@@ -278,8 +278,8 @@
 
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         function playSound(type) {
+            if (audioCtx.state === 'suspended') { audioCtx.resume(); }
             if(!document.getElementById('set-sound').checked) return;
-            if(audioCtx.state === 'suspended') audioCtx.resume();
             const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
             osc.connect(gain); gain.connect(audioCtx.destination);
             const now = audioCtx.currentTime;
@@ -450,7 +450,6 @@
             document.getElementById('modal-roulette').classList.add('active');
             const rName = document.getElementById('roulette-name');
             
-            // FILTRE STRICT : Exclut Mister White des joueurs éligibles pour commencer
             const eligibles = game.tableSlots
                 .map(id => game.rolesData[id])
                 .filter(p => p.role !== 'WHITE');
@@ -548,6 +547,29 @@
             document.querySelectorAll('.anim-screen').forEach(s => s.classList.remove('active'));
             const civils = game.rolesData.filter(p => p.role === 'CIVIL' && p.isAlive);
             const under = game.rolesData.filter(p => p.role === 'UNDER' && p.isAlive);
+            const white = game.rolesData.filter(p => p.role === 'WHITE' && p.isAlive);
+
+            if (under.length === 0 && white.length === 0) game.winner = 'CIVILS';
+            else if (under.length > 0 && white.length === 0 && civils.length <= 1) game.winner = 'UNDER';
+            else if (white.length > 0 && under.length === 0 && civils.length <= 1) game.winner = 'WHITE';
+
+            if (game.winner) endGame();
+            else startGamePlay();
+        }
+
+        function endGame() {
+            switchScreen('screen-victory');
+            playSound('win'); vibrate([100, 100, 100, 100, 400]);
+            const t = document.getElementById('vicTitle'); const s = document.getElementById('vicSub');
+            if (game.winner === 'CIVILS') { t.innerText = "VICTOIRE CIVILS"; t.style.color = 'var(--blue)'; s.innerText = "Tous les intrus ont été éliminés !"; }
+            if (game.winner === 'UNDER') { t.innerText = "VICTOIRE UNDERCOVER"; t.style.color = 'var(--red)'; s.innerText = "L'Undercover s'est fondu dans la masse."; }
+            if (game.winner === 'WHITE') { t.innerText = "VICTOIRE MR WHITE"; t.style.color = 'var(--yellow)'; s.innerText = "Mr White a deviné le mot exact !"; }
+            document.getElementById('vic-civil-word').innerText = game.civilWord;
+            document.getElementById('vic-under-word').innerText = game.underWord;
+        }
+    </script>
+</body>
+</html>
             const white = game.rolesData.filter(p => p.role === 'WHITE' && p.isAlive);
 
             if (under.length === 0 && white.length === 0) game.winner = 'CIVILS';
