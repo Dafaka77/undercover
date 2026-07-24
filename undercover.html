@@ -284,7 +284,7 @@
         <div style="font-size: 5rem; margin-bottom: 1rem;">🤪</div>
         <h1 style="font-size: 2.5rem; margin-bottom: 0.5rem;">C'était le FOU !</h1>
         <p style="font-size: 1.2rem; font-weight: 700;" id="txt-elim-fool">Il s'est fait éliminer au tour 1 et remporte la partie solo !</p>
-        <button class="btn btn-gray" style="max-width: 200px; margin-top: 3rem; color: #1C1C1E;" onclick="triggerFoolWin()">Victoire du Fou !</button>
+        <button class="btn btn-gray" style="max-width: 200px; margin-top: 3rem; color: #1C1C1E;" id="btnFoolAction" onclick="triggerFoolWin()">Victoire du Fou !</button>
     </div>
 
     <div class="anim-screen bg-gold" id="anim-white">
@@ -614,7 +614,7 @@
             game.rolesData = defaultPlayers.map((name, i) => {
                 let role = roles[i];
                 let word = game.civilWord;
-                if(role === 'WHITE') word = "???";
+                if(role === 'WHITE') word = "Mister White"; // Affichage textuel direct
                 if(role === 'UNDER') word = game.underWord;
                 if(role === 'FOOL') word = game.civilWord; // Le fou voit le mot civil pour bluffer
                 return { id: i, name: name, role: role, avatar: AVATARS[i%AVATARS.length], word: word, isAlive: true, hasRevealed: false };
@@ -768,22 +768,24 @@
             game.history.push(`<b>Tour ${game.round} :</b> ${p.avatar} ${p.name} - <i>${roleName}</i>`);
             document.getElementById('history-content').innerHTML = game.history.join('<br><br>');
 
-            // Règle du Fou : s'il est éliminé au Tour 1, il gagne immédiatement !
+            // Règle du Fou : Si éliminé au TOUR 1 -> VICTOIRE DU FOU (la partie s'arrête)
             if (p.role === 'FOOL' && game.round === 1) {
                 if(!document.getElementById('set-anim').checked) { triggerFoolWin(); return; }
                 document.getElementById('txt-elim-fool').innerText = `${p.name} était le FOU et s'est fait éliminer au tour 1 !`;
+                document.getElementById('btnFoolAction').innerText = "Victoire du Fou !";
+                document.getElementById('btnFoolAction').setAttribute('onclick', 'triggerFoolWin()');
                 document.getElementById('anim-elim-fool').classList.add('active');
                 return;
             }
 
-            // S'il est éliminé mais PAS au tour 1, on affiche l'animation du Fou s'il y en a une, ou on continue
-            if (p.role === 'FOOL') {
-                if(!document.getElementById('set-anim').checked) { continueAfterElim(); return; }
-                document.getElementById('txt-elim-fool').innerText = `${p.name} était le FOU ! (Éliminé au tour ${game.round})`;
-                document.getElementById('anim-elim-fool').classList.add('active');
-                // On s'assure que cliquer sur le bouton de l'anim continue juste la partie et ne déclenche pas la victoire solo
-                document.querySelector('#anim-elim-fool button').setAttribute('onclick', 'continueAfterElim()');
+            // Règle du Fou : Si éliminé après le tour 1 -> C'était le fou, mais PAS de victoire, la partie continue
+            if (p.role === 'FOOL' && game.round > 1) {
                 game.round++;
+                if(!document.getElementById('set-anim').checked) { continueAfterElim(); return; }
+                document.getElementById('txt-elim-fool').innerText = `${p.name} était le FOU ! (Éliminé au tour ${game.round - 1})`;
+                document.getElementById('btnFoolAction').innerText = "Continuer";
+                document.getElementById('btnFoolAction').setAttribute('onclick', 'continueAfterElim()');
+                document.getElementById('anim-elim-fool').classList.add('active');
                 return;
             }
 
@@ -809,8 +811,6 @@
 
         function triggerFoolWin() {
             document.querySelectorAll('.anim-screen').forEach(s => s.classList.remove('active'));
-            // Remettre le comportement normal du bouton du fou pour les prochaines parties
-            document.querySelector('#anim-elim-fool button').setAttribute('onclick', 'triggerFoolWin()');
             game.winner = 'FOOL';
             endGame();
         }
@@ -825,8 +825,6 @@
 
         function continueAfterElim() {
             document.querySelectorAll('.anim-screen').forEach(s => s.classList.remove('active'));
-            // Remettre le comportement normal du bouton du fou au cas où
-            document.querySelector('#anim-elim-fool button').setAttribute('onclick', 'triggerFoolWin()');
 
             const civils = game.rolesData.filter(p => p.role === 'CIVIL' && p.isAlive);
             const under = game.rolesData.filter(p => p.role === 'UNDER' && p.isAlive);
