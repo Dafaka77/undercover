@@ -63,7 +63,6 @@
         .overlay.active .modal-content { transform: scale(1); }
         .btn-back-modal { position: absolute; top: 1rem; left: 1rem; background: none; border: none; font-size: 1.5rem; color: var(--text-muted); cursor: pointer; }
 
-        /* SECRET HOLD CARD ZONE */
         .secret-press-box { margin: 1.2rem 0; padding: 1.8rem 1rem; border-radius: 20px; border: 2px dashed var(--pink); background: rgba(255,97,216,0.05); cursor: pointer; user-select: none; transition: background 0.2s; }
         .secret-press-box:active { background: rgba(255,97,216,0.15); }
 
@@ -230,6 +229,7 @@
             <div class="secret-press-box" id="pressSecretBox">
                 <div style="font-size: 0.75rem; text-transform: uppercase; color: var(--pink); font-weight: 800; margin-bottom: 0.3rem;" id="secret-instruction">👇 MAINTIENS APPUYÉ POUR VOIR TON RÔLE</div>
                 <h3 id="word-text" style="font-size: 1.5rem; color: var(--text-muted); filter: blur(8px); transition: filter 0.1s;">Mot Secret</h3>
+                <div id="word-role-badge" style="margin-top: 0.5rem; font-weight: 800; font-size: 0.9rem; color: var(--pink); display: none;"></div>
             </div>
 
             <button class="btn btn-green" id="btnRememberWord" onclick="closeWordModal()" style="padding: 0.9rem; font-size: 1rem; box-shadow: 0 5px 15px rgba(52,199,89,0.3);">J'ai mémorisé ✅</button>
@@ -616,7 +616,7 @@
                 let word = game.civilWord;
                 if(role === 'WHITE') word = "???";
                 if(role === 'UNDER') word = game.underWord;
-                if(role === 'FOOL') word = "FOU";
+                if(role === 'FOOL') word = game.civilWord; // Le fou voit le mot civil pour bluffer
                 return { id: i, name: name, role: role, avatar: AVATARS[i%AVATARS.length], word: word, isAlive: true, hasRevealed: false };
             });
 
@@ -647,19 +647,22 @@
             document.getElementById('word-name').innerText = p.name;
             const wText = document.getElementById('word-text');
             const inst = document.getElementById('secret-instruction');
+            const roleBadge = document.getElementById('word-role-badge');
 
             // Reset flou au démarrage de la modale
             wText.style.filter = 'blur(8px)';
             wText.style.color = 'var(--text-muted)';
             inst.innerText = "👇 MAINTIENS APPUYÉ POUR VOIR TON RÔLE";
 
-            if(p.role === 'WHITE') {
-                wText.innerText = "Mister White";
-            } else if(p.role === 'FOOL') {
-                wText.innerText = "FOU";
+            wText.innerText = p.word;
+
+            if(p.role === 'FOOL') {
+                roleBadge.style.display = 'block';
+                roleBadge.innerText = "🤪 Rôle secret : Tu es le FOU !";
             } else {
-                wText.innerText = p.word;
+                roleBadge.style.display = 'none';
             }
+
             document.getElementById('modal-word').classList.add('active');
         }
 
@@ -761,7 +764,7 @@
             
             const p = game.rolesData[game.pendingPlayerId];
             p.isAlive = false;
-            let roleName = p.role === 'CIVIL' ? 'Civil' : (p.role === 'UNDER' ? 'Undercover' : (p.role === 'WHITE' ? 'Mister White' : 'Fou'));
+            let roleName = p.role === 'CIVIL' ? 'Civil' : (p.role === 'UNDER' ? 'Undercover' : (p.role === 'WHITE' ? 'Mister White' : 'Fou 🤪'));
             game.history.push(`<b>Tour ${game.round} :</b> ${p.avatar} ${p.name} - <i>${roleName}</i>`);
             document.getElementById('history-content').innerHTML = game.history.join('<br><br>');
 
@@ -770,6 +773,17 @@
                 if(!document.getElementById('set-anim').checked) { triggerFoolWin(); return; }
                 document.getElementById('txt-elim-fool').innerText = `${p.name} était le FOU et s'est fait éliminer au tour 1 !`;
                 document.getElementById('anim-elim-fool').classList.add('active');
+                return;
+            }
+
+            // S'il est éliminé mais PAS au tour 1, on affiche l'animation du Fou s'il y en a une, ou on continue
+            if (p.role === 'FOOL') {
+                if(!document.getElementById('set-anim').checked) { continueAfterElim(); return; }
+                document.getElementById('txt-elim-fool').innerText = `${p.name} était le FOU ! (Éliminé au tour ${game.round})`;
+                document.getElementById('anim-elim-fool').classList.add('active');
+                // On s'assure que cliquer sur le bouton de l'anim continue juste la partie et ne déclenche pas la victoire solo
+                document.querySelector('#anim-elim-fool button').setAttribute('onclick', 'continueAfterElim()');
+                game.round++;
                 return;
             }
 
@@ -795,6 +809,8 @@
 
         function triggerFoolWin() {
             document.querySelectorAll('.anim-screen').forEach(s => s.classList.remove('active'));
+            // Remettre le comportement normal du bouton du fou pour les prochaines parties
+            document.querySelector('#anim-elim-fool button').setAttribute('onclick', 'triggerFoolWin()');
             game.winner = 'FOOL';
             endGame();
         }
@@ -809,6 +825,9 @@
 
         function continueAfterElim() {
             document.querySelectorAll('.anim-screen').forEach(s => s.classList.remove('active'));
+            // Remettre le comportement normal du bouton du fou au cas où
+            document.querySelector('#anim-elim-fool button').setAttribute('onclick', 'triggerFoolWin()');
+
             const civils = game.rolesData.filter(p => p.role === 'CIVIL' && p.isAlive);
             const under = game.rolesData.filter(p => p.role === 'UNDER' && p.isAlive);
             const white = game.rolesData.filter(p => p.role === 'WHITE' && p.isAlive);
